@@ -51,7 +51,7 @@
 import {onBeforeMount, ref} from 'vue'
 import dayjs from 'dayjs'
 import {deleteArticleById, getArticleList} from "../../../api/articleSystem/articleRequest";
-import {pageParam} from "../../../api/articleSystem/type";
+import {pageParam} from "../../../api/common/type";
 import ArticleDialog from "../articleSystem/articleDialog/Index.vue"
 
 const PAGE_SIZE = 5
@@ -76,12 +76,11 @@ onBeforeMount(async () => {
     pageCount.value = result.total
 })
 
-
 const currentChange = (currentPage: any) => {
     console.log("page变化", currentPage)
     pageInfo.pageNum = currentPage
     pageInfo.pageSize = PAGE_SIZE
-    getArticleList(pageInfo).then((result) => {
+    getArticleList(pageInfo).then((result: { pageList: any; total: number; }) => {
         articleList.value = result.pageList
         pageCount.value = result.total
     })

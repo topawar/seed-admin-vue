@@ -1,5 +1,6 @@
 import {http} from "../request";
-import {article, pageParam} from "./type";
+import {article} from "./type";
+import {pageParam} from "../common/type";
 
 /**
  * 获取所有文章列表

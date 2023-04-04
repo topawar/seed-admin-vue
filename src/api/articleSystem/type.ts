@@ -10,7 +10,3 @@ export interface article {
     imageurl: string,
 }
 
-export interface pageParam{
-    pageNum:number,
-    pageSize:number,
-}
