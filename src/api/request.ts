@@ -21,6 +21,7 @@ const service: AxiosInstance = axios.create({
 service.interceptors.request.use((config: AxiosRequestConfig) => {
     config.transformRequest = [function (data) {
         // 对 data 进行任意转换处理
+        console.log(Qs.stringify(data))
         return Qs.stringify(data)
     }]
     return config;
@@ -32,7 +33,6 @@ service.interceptors.request.use((config: AxiosRequestConfig) => {
 // @ts-ignore
 service.interceptors.response.use((response: AxiosResponse) => {
     const {code, data, msg} = response.data
-
     if (code == 50000) {
         return
     }
@@ -48,6 +48,10 @@ export const http = {
     },
 
     post<T = any>(url: string, data?: object, config?: AxiosRequestConfig): Promise<T> {
+        return service.post(url, data, config)
+    },
+
+    postAny<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
         return service.post(url, data, config)
     },
 

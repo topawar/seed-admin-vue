@@ -16,3 +16,4 @@ export function getArticleList(pageParam: pageParam) {
 export function deleteArticleById(article_id: number) {
     return http.post("/article/deleteArticleById", {article_id: article_id});
 }
+

@@ -7,7 +7,12 @@
             <el-table-column prop="article_kind" label="类别" width="120"/>
             <el-table-column prop="pointnum" label="点赞量" width="120"/>
             <el-table-column prop="favoritenum" label="喜爱数" width="120"/>
-            <el-table-column prop="imageurl" label="封面" width="120"/>
+            <el-table-column label="封面" width="120">
+                <template #default="scope">
+                    <el-image style="width: 100px; height: 100px" :src="scope.row.imageurl" fit="fill"/>
+                </template>
+            </el-table-column>
+            >
             <el-table-column fixed="right" label="Operations" width="120">
                 <template #default="scope">
                     <el-button
@@ -36,10 +41,10 @@
         <div style="float: right">
             <el-pagination
                     @update:page-size="PAGE_SIZE"
-                    :pager-count="PAGER_COUNT.value"
-                    :page-count="pageCount"
+                    :pager-count="pagination.PAGER_COUNT"
+                    :page-count="pagination.pageCount"
                     layout="prev, pager, next"
-                    @update:current-page.sync="current_page.value"
+                    @update:current-page.sync="pagination.current_page"
                     @current-change="currentChange"
             />
         </div>
@@ -55,10 +60,13 @@ import {pageParam} from "../../../api/common/type";
 import ArticleDialog from "../articleSystem/articleDialog/Index.vue"
 
 const PAGE_SIZE = 5
-const PAGER_COUNT = 11
-const pageCount = ref(10)
 
-const current_page = ref(1)
+const pagination = ref({
+    current_page: 1,
+    pageCount: 10,
+    PAGER_COUNT: 11,
+
+})
 
 const now = new Date()
 
@@ -73,22 +81,31 @@ const pageInfo: pageParam = {
 onBeforeMount(async () => {
     const result = await getArticleList(pageInfo);
     articleList.value = result.pageList
-    pageCount.value = result.total
+    pagination.value.pageCount = result.total
 })
 
 const currentChange = (currentPage: any) => {
     console.log("page变化", currentPage)
     pageInfo.pageNum = currentPage
     pageInfo.pageSize = PAGE_SIZE
+    pagination.value.current_page = currentPage
     getArticleList(pageInfo).then((result: { pageList: any; total: number; }) => {
         articleList.value = result.pageList
-        pageCount.value = result.total
+        pagination.value.pageCount = result.total
     })
 }
 const deleteRow = (article_id: number) => {
-    console.log(article_id)
+    console.log(pagination.value.current_page)
     deleteArticleById(article_id).then((res) => {
-        console.log(res)
+        if (1 == res) {
+            pageInfo.pageNum = pagination.value.current_page
+            console.log(pagination.value.current_page)
+            pageInfo.pageSize = PAGE_SIZE
+            getArticleList(pageInfo).then((result: { pageList: any; total: number; }) => {
+                articleList.value = result.pageList
+                pagination.value.pageCount = result.total
+            })
+        }
     })
 }
 

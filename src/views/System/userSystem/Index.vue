@@ -1,23 +1,72 @@
 <template>
-    <el-table :data="userList" style="width: 100%" max-height="450">
+    <el-table :data="userStore.userList" style="width: 100%" max-height="550">
         <el-table-column fixed prop="uid" label="Id" width="150"/>
         <el-table-column prop="name" label="用户名" width="150"/>
-        <el-table-column prop="effectiveTag" label="状态" width="150"/>
         <el-table-column prop="password" label="密码" width="150"/>
-        <el-table-column prop="gender" label="性别" width="150"/>
-        <el-table-column prop="age" label="年龄" width="150"/>
-        <el-table-column prop="imageurl" label="头像" width="150"/>
-        <el-table-column prop="role" label="角色" width="150"/>
-        <el-table-column prop="create_time" label="创建时间" width="150"/>
-        <el-table-column fixed="right" label="Operations">
+        <el-table-column label="性别" width="150">
             <template #default="scope">
+                <el-switch
+                        v-model="scope.row.gender"
+                        inline-prompt
+                        style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                        active-text="男"
+                        inactive-text="女"
+                        :active-value="1"
+                        :inactive-value="0"
+                />
+            </template>
+        </el-table-column>
+        <el-table-column prop="age" label="年龄" width="150"/>
+        <el-table-column label="头像" width="150">
+            <template #default="scope">
+                <el-image style="width: 100px; height: 100px" :src="scope.row.imageurl" fit="cover"/>
+            </template>
+        </el-table-column>
+        <el-table-column label="角色" width="150">
+            <template #default="scope">
+                <el-switch
+                        v-model="scope.row.role"
+                        inline-prompt
+                        style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                        active-text="管理员"
+                        inactive-text="普通用户"
+                        :active-value="1"
+                        :inactive-value="0"
+                />
+            </template>
+        </el-table-column>
+        <el-table-column label="状态" width="150">
+            <template #default="scope">
+                <el-switch
+                        v-model="scope.row.effectiveTag"
+                        inline-prompt
+                        style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                        active-text="有效"
+                        inactive-text="无效"
+                        :active-value="1"
+                        :inactive-value="0"
+                />
+            </template>
+        </el-table-column>
+        <el-table-column prop="create_time" label="创建时间" width="200"/>
+        <el-table-column fixed="right" label="Operations">
+            <template #default="scope" style="width: 150px">
                 <el-button
                         link
                         type="primary"
                         size="small"
-                        @click.prevent="deleteRow(scope.$index)"
+                        @click.prevent="deleteRow(scope.row.id)"
                 >
                     Remove
+                </el-button>
+                <el-button
+                        link
+                        type="primary"
+                        size="small"
+                        @click.prevent="editRow(scope)"
+                        style="width: 150px"
+                >
+                    Edit
                 </el-button>
             </template>
         </el-table-column>
@@ -25,35 +74,43 @@
     <div style="float: right">
         <el-pagination
                 @update:page-size="PAGE_SIZE"
-                :pager-count="PAGER_COUNT.value"
-                :page-count="pageCount"
+                :pager-count="pagination.PAGER_COUNT"
+                :page-count="pagination.pageCount"
                 layout="prev, pager, next"
-                @update:current-page.sync="current_page.value"
+                @update:current-page.sync="pagination.current_page"
                 @current-change="currentChange"
         />
     </div>
+    <user-dialog ref="userDialog"></user-dialog>
 </template>
 
 <script lang="ts" setup>
-import {onBeforeMount, ref} from 'vue'
-import dayjs from 'dayjs'
-import {getUserList} from "../../../api/user/userRequest";
-import {User} from "../../../api/user/type";
+import {onBeforeMount, onBeforeUpdate, ref} from 'vue'
+import {deleteUserById, getUserList} from "../../../api/user/userRequest";
 import {pageParam} from "../../../api/common/type";
-import {getArticleList} from "../../../api/articleSystem/articleRequest";
+import UserDialog from "../userSystem/userDialog/Index.vue";
+import {userSystemStore} from "../../../stores/userSystem";
 
-const userList = ref()
+const userStore = userSystemStore();
 const PAGE_SIZE = 5
-const PAGER_COUNT = 11
-const pageCount = ref(10)
 
-const current_page = ref(1)
-onBeforeMount(async () => {
-    const result = await getUserList(pageInfo);
-    userList.value = result.pageList
-    pageCount.value = result.total
-    console.log(userList)
+const pagination = ref({
+    current_page: 1,
+    pageCount: 10,
+    PAGER_COUNT: 11,
 })
+
+const userDialog = ref()
+const current_page = ref(1)
+
+
+
+onBeforeMount(async () => {
+    const result = await getUserList(pageInfo)
+    userStore.setUserList(result)
+    pagination.value.pageCount = userStore.total
+})
+
 
 const pageInfo: pageParam = {
     pageNum: 1,
@@ -65,17 +122,33 @@ const currentChange = (currentPage: any) => {
     console.log("page变化", currentPage)
     pageInfo.pageNum = currentPage
     pageInfo.pageSize = PAGE_SIZE
+    pagination.value.current_page = currentPage
+    userStore.current_page = current_page.value
     getUserList(pageInfo).then((result: { pageList: any; total: number; }) => {
-        userList.value = result.pageList
-        pageCount.value = result.total
+        userStore.setUserList(result)
+        pagination.value.pageCount = userStore.total
     })
 }
 
 const now = new Date()
 
 
-const deleteRow = (index: number) => {
+const deleteRow = (id: string) => {
+    deleteUserById(id).then((res => {
+        if (1 == res) {
+            pageInfo.pageNum = current_page.value
+            pageInfo.pageSize = PAGE_SIZE
+            userStore.current_page = current_page.value
+            getUserList(pageInfo).then((result: { pageList: any; total: number; }) => {
+                userStore.setUserList(result)
+                pagination.value.pageCount = userStore.total
+            })
+        }
+    }))
+}
 
+const editRow = (scope: any) => {
+    userDialog.value.show(scope.row)
 }
 
 const onAddItem = () => {
