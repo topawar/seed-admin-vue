@@ -24,7 +24,7 @@
             <el-form-item label="头像">
                 <el-upload
                         class="avatar-uploader"
-                        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                        action="/api/user/uploadAvatar"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload"
@@ -107,7 +107,8 @@ const userSubmit = (() => {
         age: form.age,
         effectiveTag: form.effectiveTag,
         role: form.role,
-        gender: form.gender
+        gender: form.gender,
+        imageurl: form.imageurl
     }
     updateUserById(updateUser).then((res) => {
         if (res) {
@@ -124,7 +125,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
     response,
     uploadFile
 ) => {
-    form.value.imgurl = URL.createObjectURL(uploadFile.raw!)
+    form.imageurl = URL.createObjectURL(uploadFile.raw!)
 }
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {

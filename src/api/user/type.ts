@@ -21,4 +21,5 @@ export interface UpdateUser{
     effectiveTag: number,
     role: number,
     updateTime?:string,
+    imageurl:string,
 }
