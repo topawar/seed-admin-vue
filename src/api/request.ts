@@ -21,7 +21,6 @@ const service: AxiosInstance = axios.create({
 service.interceptors.request.use((config: AxiosRequestConfig) => {
     config.transformRequest = [function (data) {
         // 对 data 进行任意转换处理
-        console.log(Qs.stringify(data))
         return Qs.stringify(data)
     }]
     return config;

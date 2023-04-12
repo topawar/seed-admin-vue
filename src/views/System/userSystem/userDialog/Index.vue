@@ -122,15 +122,15 @@ const userSubmit = (() => {
 })
 
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
-    response,
-    uploadFile
+    response
 ) => {
-    form.imageurl = URL.createObjectURL(uploadFile.raw!)
+    form.imageurl = response.data
 }
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-    if (rawFile.type !== 'image/jpeg') {
-        ElMessage.error('Avatar picture must be JPG format!')
+    console.log(rawFile.type)
+    if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+        ElMessage.error('Avatar picture must be JPG and PNG format!')
         return false
     } else if (rawFile.size / 1024 / 1024 > 2) {
         ElMessage.error('Avatar picture size can not exceed 2MB!')
