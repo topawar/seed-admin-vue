@@ -4,9 +4,9 @@
 
   const router = useRouter();
 
-  onBeforeMount(()=>{
-    router.push("/")
-  })
+  // onBeforeMount(()=>{
+  //   router.push("/")
+  // })
 </script>
 <template>
   <router-view></router-view>

@@ -23,3 +23,8 @@ export interface UpdateUser{
     updateTime?:string,
     imageurl:string,
 }
+
+export interface LoginParam{
+    name: string,
+    password: string,
+}

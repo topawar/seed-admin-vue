@@ -48,7 +48,11 @@
                 />
             </template>
         </el-table-column>
-        <el-table-column prop="create_time" label="创建时间" width="200"/>
+        <el-table-column label="创建时间" width="200">
+            <template #default="scope">
+                {{ dayjs(scope.row.create_time).format("YYYY/MM/DD HH:mm:ss") }}
+            </template>
+        </el-table-column>
         <el-table-column fixed="right" label="Operations">
             <template #default="scope" style="width: 150px">
                 <el-button
@@ -85,11 +89,14 @@
 </template>
 
 <script lang="ts" setup>
-import {onBeforeMount, onBeforeUpdate, ref} from 'vue'
+import {onBeforeMount, ref} from 'vue'
 import {deleteUserById, getUserList} from "../../../api/user/userRequest";
 import {pageParam} from "../../../api/common/type";
 import UserDialog from "../userSystem/userDialog/Index.vue";
 import {userSystemStore} from "../../../stores/userSystem";
+import dayjs from "dayjs";
+
+
 
 const userStore = userSystemStore();
 const PAGE_SIZE = 5

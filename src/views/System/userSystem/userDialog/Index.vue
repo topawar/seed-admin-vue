@@ -25,6 +25,7 @@
                 <el-upload
                         class="avatar-uploader"
                         action="/api/user/uploadAvatar"
+                        :headers="headers"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload"
@@ -76,6 +77,8 @@ const userStore = userSystemStore();
 
 const userDialogTag = ref<boolean>(false)
 
+const headers = {tokenId:window.localStorage.getItem("tokenId")}
+
 
 const show = (row: any) => {
     Object.keys(row).forEach((key) => {
@@ -124,7 +127,12 @@ const userSubmit = (() => {
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
     response
 ) => {
-    form.imageurl = response.data
+    if (response.code == 20000){
+        ElMessage.success('upload success')
+        form.imageurl = response.data
+        return
+    }
+    ElMessage.error(response.message)
 }
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {

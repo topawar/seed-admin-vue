@@ -11,7 +11,10 @@ const service: AxiosInstance = axios.create({
     baseURL: '/api',
     timeout: 50000,
     responseEncoding: "UTF-8",
-    responseType: "json"
+    responseType: "json",
+    headers:{
+        tokenId: window.localStorage.getItem("tokenId")
+    }
 })
 
 /**

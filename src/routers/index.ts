@@ -46,6 +46,11 @@ export const constantRoutes: Array<RouteRecordRaw & extendRoute> = [
                 meta:{name:"用户管理"},
             },
         ]
+    },
+    {
+        path:'/user/login',
+        name:'user',
+        component: ()=> import("../views/Login/Index.vue"),
     }
 
 ]

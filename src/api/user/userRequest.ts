@@ -1,5 +1,5 @@
 import {http} from "../request";
-import {UpdateUser} from "./type";
+import {LoginParam, UpdateUser} from "./type";
 import {pageParam} from "../common/type";
 
 /**
@@ -15,4 +15,7 @@ export function deleteUserById(id: string) {
 
 export function updateUserById(updateUser:UpdateUser){
     return http.post("/user/updateUserById",updateUser)
+}
+export function login(loginParam:LoginParam){
+    return http.post("/user/login",loginParam)
 }
