@@ -1,7 +1,7 @@
 <template>
     <el-container class="common-container">
       <el-aside width="200px" class="aside">
-        <layoutAside></layoutAside>
+        <layout-aside></layout-aside>
       </el-aside>
       <el-container>
         <el-header class="header">
@@ -42,8 +42,8 @@
 <script lang="ts" setup>
 import home from "../Home/Index.vue"
 import footer from  "../../components/Footer/Index.vue"
-import layoutAside from "../../components/Aside/Index.vue"
-import tabsNav from "../../components/TabsNav/Index.vue"
+import LayoutAside from "../../components/Aside/Index.vue"
+import TabsNav from "../../components/TabsNav/Index.vue"
 import { useWrapComponents } from '../../hooks/useWrapComponents'
 
 const containerComponent={

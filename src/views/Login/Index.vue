@@ -13,6 +13,7 @@
 import {reactive, ref} from 'vue'
 import {login} from "../../api/user/userRequest";
 import {useRouter} from "vue-router";
+import {userStore} from "../../stores/userStore";
 
 const router = useRouter()
 
@@ -26,7 +27,8 @@ const form = reactive({
 const userLogin = () => {
     login({name: form.name, password: form.password}).then((res) => {
         if (res) {
-            window.localStorage.setItem("tokenId", res.tokenId)
+            userStore().$state.user = res.userInfo
+            window.localStorage.setItem("tokenId",res.tokenId)
             router.replace("/home")
         }
     })

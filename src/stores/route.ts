@@ -1,8 +1,5 @@
 import {defineStore} from "pinia";
-import {state} from "vue-tsc/out/shared";
-import {createPinia} from "pinia";
 
-export default createPinia()
 
 interface state {
     keepaliveRoute: routeInfo[]
@@ -13,6 +10,7 @@ export const useRouteStore = defineStore("routeStore", {
         let initRoute = [{routePath: "/home", routeName: "首页", routeKeepAlive: true}]
         return {
             keepaliveRoute: initRoute || [] as routeInfo[],
+            // tokenId: ""
         }
     },
     getters: {
@@ -28,9 +26,19 @@ export const useRouteStore = defineStore("routeStore", {
         },
         removeKeepaliveRoute(routePath: any) {
             const filterRoute = this.keepaliveRoute.filter(rt => rt.routePath != routePath)
-            this.keepaliveRoute.splice(0,this.keepaliveRoute.length,...filterRoute)
+            this.keepaliveRoute.splice(0, this.keepaliveRoute.length, ...filterRoute)
         },
-    }
+    },
+    // persist: {
+    //     enabled: true,
+    //     strategies: [
+    //         {
+    //             key:"tokenId",
+    //             storage: localStorage,
+    //             paths: ['tokenId']
+    //         }
+    //     ]
+    // }
 })
 
 export interface routeInfo {

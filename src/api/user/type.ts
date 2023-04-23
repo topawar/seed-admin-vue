@@ -12,6 +12,8 @@ export interface User {
     update_time: string,
 }
 
+
+
 export interface UpdateUser{
     id: number,
     name: string,

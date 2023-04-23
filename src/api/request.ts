@@ -1,20 +1,23 @@
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
 import Qs from "qs"
+import router from "../routers/index"
+// import {useRouteStore} from "../stores/route"
+// import pinia from "../stores/store";
 export interface Result<T = any> {
     code: 0.
     data: {},
     message: "ok"
 }
-
+// const routeStore = useRouteStore(pinia);
 
 const service: AxiosInstance = axios.create({
     baseURL: '/api',
     timeout: 50000,
     responseEncoding: "UTF-8",
     responseType: "json",
-    headers:{
-        tokenId: window.localStorage.getItem("tokenId")
-    }
+    // headers:{
+    //     tokenId: routeStore.tokenId
+    // }
 })
 
 /**
@@ -23,9 +26,11 @@ const service: AxiosInstance = axios.create({
 // @ts-ignore
 service.interceptors.request.use((config: AxiosRequestConfig) => {
     config.transformRequest = [function (data) {
-        // 对 data 进行任意转换处理
+        // @ts-ignore
         return Qs.stringify(data)
     }]
+    // @ts-ignore
+    config.headers.set("tokenId",window.localStorage.getItem("tokenId"))
     return config;
 }, (error: AxiosError) => {
     return Promise.reject(error)
@@ -37,6 +42,12 @@ service.interceptors.response.use((response: AxiosResponse) => {
     const {code, data, msg} = response.data
     if (code == 50000) {
         return
+    }
+    if (code == 50005){
+        router.replace("/user/login")
+    }
+    if (code == 50004){
+        router.replace("/user/login")
     }
     return data;
 }, (error: AxiosError) => {

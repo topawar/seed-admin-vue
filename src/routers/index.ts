@@ -45,6 +45,12 @@ export const constantRoutes: Array<RouteRecordRaw & extendRoute> = [
                 component: () => import("../views/System/userSystem/Index.vue"),
                 meta:{name:"用户管理"},
             },
+            {
+                path: "routeSystem",
+                name: "routeSystem",
+                component: () => import("../views/System/routeSystem/Index.vue"),
+                meta:{name:"路由管理"},
+            },
         ]
     },
     {
