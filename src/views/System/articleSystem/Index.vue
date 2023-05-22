@@ -80,7 +80,7 @@ const pageInfo: pageParam = {
 
 onBeforeMount(async () => {
     const result = await getArticleList(pageInfo);
-    articleList.value = result.pageList
+    articleList.value = result.records
     pagination.value.pageCount = result.total
 })
 
@@ -89,8 +89,8 @@ const currentChange = (currentPage: any) => {
     pageInfo.pageNum = currentPage
     pageInfo.pageSize = PAGE_SIZE
     pagination.value.current_page = currentPage
-    getArticleList(pageInfo).then((result: { pageList: any; total: number; }) => {
-        articleList.value = result.pageList
+    getArticleList(pageInfo).then((result: { records: any; total: number; }) => {
+        articleList.value = result.records
         pagination.value.pageCount = result.total
     })
 }
@@ -101,8 +101,8 @@ const deleteRow = (article_id: number) => {
             pageInfo.pageNum = pagination.value.current_page
             console.log(pagination.value.current_page)
             pageInfo.pageSize = PAGE_SIZE
-            getArticleList(pageInfo).then((result: { pageList: any; total: number; }) => {
-                articleList.value = result.pageList
+            getArticleList(pageInfo).then((result: { records: any; total: number; }) => {
+                articleList.value = result.records
                 pagination.value.pageCount = result.total
             })
         }

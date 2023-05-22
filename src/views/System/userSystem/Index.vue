@@ -131,7 +131,7 @@ const currentChange = (currentPage: any) => {
     pageInfo.pageSize = PAGE_SIZE
     pagination.value.current_page = currentPage
     userStore.current_page = current_page.value
-    getUserList(pageInfo).then((result: { pageList: any; total: number; }) => {
+    getUserList(pageInfo).then((result: { records: any; total: number; }) => {
         userStore.setUserList(result)
         pagination.value.pageCount = userStore.total
     })
@@ -146,7 +146,7 @@ const deleteRow = (id: string) => {
             pageInfo.pageNum = current_page.value
             pageInfo.pageSize = PAGE_SIZE
             userStore.current_page = current_page.value
-            getUserList(pageInfo).then((result: { pageList: any; total: number; }) => {
+            getUserList(pageInfo).then((result: { records: any; total: number; }) => {
                 userStore.setUserList(result)
                 pagination.value.pageCount = userStore.total
             })

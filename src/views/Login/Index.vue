@@ -28,7 +28,6 @@ const userLogin = () => {
     login({name: form.name, password: form.password}).then((res) => {
         if (res) {
             userStore().$state.user = res.userInfo
-            window.localStorage.setItem("tokenId",res.tokenId)
             router.replace("/home")
         }
     })

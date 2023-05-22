@@ -25,7 +25,6 @@
                 <el-upload
                         class="avatar-uploader"
                         action="/api/user/uploadAvatar"
-                        :headers="headers"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload"
@@ -77,7 +76,6 @@ const userStore = userSystemStore();
 
 const userDialogTag = ref<boolean>(false)
 
-const headers = {tokenId:window.localStorage.getItem("tokenId")}
 
 
 const show = (row: any) => {

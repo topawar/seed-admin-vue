@@ -4,7 +4,6 @@ router.beforeEach(async (to, from, next) => {
     const result = await login({name: '', password: ''})
     console.log("to path " + to.path)
     if (to.path == "/user/login") {
-        console.log("取不到" + window.localStorage.getItem("tokenId"))
         if (result != null) {
             console.log("result 不为空走")
             next("/");

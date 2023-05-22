@@ -13,7 +13,7 @@ export const userSystemStore = defineStore("userSystemStore", {
     },
     actions: {
         setUserList(result: any) {
-            this.userList = result.pageList
+            this.userList = result.records
             this.total = result.total
         },
     }

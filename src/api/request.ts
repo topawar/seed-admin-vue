@@ -1,23 +1,18 @@
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
 import Qs from "qs"
 import router from "../routers/index"
-// import {useRouteStore} from "../stores/route"
-// import pinia from "../stores/store";
 export interface Result<T = any> {
     code: 0.
     data: {},
     message: "ok"
 }
-// const routeStore = useRouteStore(pinia);
 
 const service: AxiosInstance = axios.create({
     baseURL: '/api',
     timeout: 50000,
     responseEncoding: "UTF-8",
     responseType: "json",
-    // headers:{
-    //     tokenId: routeStore.tokenId
-    // }
+    withCredentials: true
 })
 
 /**
@@ -29,8 +24,6 @@ service.interceptors.request.use((config: AxiosRequestConfig) => {
         // @ts-ignore
         return Qs.stringify(data)
     }]
-    // @ts-ignore
-    config.headers.set("tokenId",window.localStorage.getItem("tokenId"))
     return config;
 }, (error: AxiosError) => {
     return Promise.reject(error)
